@@ -1,11 +1,11 @@
 # Bucket to store website
 resource "google_storage_bucket" "winter_boot_website" {
   name = "winter-boot-bucket"
-  location     = "US"
+  location     = var.gcp_region
 }
 
 # Make new objects public
-resource "google_storage_bucket_access_control" "public_rule" {
+resource "google_storage_object_access_control" "public_rule" {
   object = google_storage_bucket_object.static_site_source.name
   bucket = google_storage_bucket.winter_boot_website.name
   role = "READER"
@@ -16,5 +16,5 @@ resource "google_storage_bucket_access_control" "public_rule" {
 resource "google_storage_bucket_object" "static_site_source" {
   name     = "index.html"
   source   = "../website/index.html"
-  bucket   = "google_storage_bucket.winter_boot_website.name"
+  bucket   = google_storage_bucket.winter_boot_website.name
 }
